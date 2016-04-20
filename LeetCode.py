@@ -1,3 +1,31 @@
+# 142. Linked List Cycle II
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def detectCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if head == None:
+            return None
+        i, j = head, head
+        while True:
+            if j.next and j.next.next:
+                i, j = i.next, j.next.next
+                if i == j:
+                    i = head
+                    while i != j:
+                        i, j = i.next, j.next
+                    return i
+            else:
+                return None
+# ----------------------------------------------------------------------
+
 # 143. Reorder List
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -109,4 +137,29 @@ class Solution(object):
                 if cur.right: s.append(cur.right)
                 if cur.left: s.append(cur.left)
          return res
+# ----------------------------------------------------------------------
+
+# 206. Reverse Linked List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def reverseList(self, head):
+        if head == None:
+            return head
+        stack = []
+        while head:
+            stack.append(head)
+            head = head.next
+        #myhead = ListNode(0)
+        head = stack.pop()
+        p = head
+        while stack:
+            p.next = stack.pop()
+            p = p.next
+        p.next = None    
+        return head
 # ----------------------------------------------------------------------
