@@ -139,6 +139,42 @@ class Solution(object):
          return res
 # ----------------------------------------------------------------------
 
+# 147. Insertion Sort List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def insertionSortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        curPtr = head
+        pHead = pTail = head
+
+        myHead = ListNode(0)
+
+        while curPtr:
+            nextPtr = curPtr.next
+            p = myHead
+
+            if curPtr.val > pTail.val:
+            while p.next and p.next.val < curPtr.val:
+                p = p.next
+
+            curPtr.next = p.next
+            p.next = curPtr
+
+            curPtr = nextPtr
+
+        return myHead.next
+# ----------------------------------------------------------------------
+
 # 160. Intersection of Two Linked Lists
 # Definition for singly-linked list.
 # class ListNode(object):
