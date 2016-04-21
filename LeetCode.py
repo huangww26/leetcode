@@ -139,6 +139,111 @@ class Solution(object):
          return res
 # ----------------------------------------------------------------------
 
+# 160. Intersection of Two Linked Lists
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def getIntersectionNode(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        pA, pB = headA, headB
+        while pA and pB:
+            if pA == pB:
+                return pA
+            else:
+                pA, pB = pA.next, pB.next
+        if pA:
+            while pA:
+                pA, headA = pA.next, headA.next
+            while headA:
+                if headA == headB:
+                    return headA
+                else:
+                    headA, headB = headA.next, headB.next
+        else:
+            while pB:
+                pB, headB = pB.next, headB.next
+            while headB:
+                if headB == headA:
+                    return headB
+                else:
+                    headA, headB = headA.next, headB.next
+                    
+    def getIntersectionNode2(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        p, q = headA, headB
+        while p != q:
+            p = p.next if p else headB
+            q = q.next if q else headA
+        return p
+
+    def getIntersectionNode3(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        pA, pB = headA, headB
+        lenA = lenB = 0
+        while pA or pB:
+            if pA:
+                lenA += 1
+                pA = pA.next
+            if pB:
+                lenB += 1
+                pB = pB.next
+        pA, pB = headA, headB
+        if lenA > lenB:
+            for i in range(lenA - lenB):
+                pA = pA.next
+        else:
+            for i in range(lenB - lenA):
+                pB = pB.next
+        while pA != pB:
+            pA, pB = pA.next, pB.next
+        return pA
+    
+    def getIntersectionNode4(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        if not headA or not headB:
+            return 
+        pA, pB = headA, headB
+        
+        while pB.next:
+            pB = pB.next
+        dumy = pB
+        dumy.next = headB
+
+        res = None
+        
+        pB = headA
+        while pA and pB:
+            pA, pB = pA.next, pB.next
+            if pB:
+                pB = pB.next
+            if pA == pB:
+                break
+        if pA and pB and pA == pB:
+            pA = headA
+            while pA != pB:
+                pA, pB = pA.next, pB.next
+            res = pA
+
+        dumy.next = None
+        return res
+# ----------------------------------------------------------------------
+
 # 206. Reverse Linked List
 # Definition for singly-linked list.
 # class ListNode(object):
