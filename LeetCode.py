@@ -1,3 +1,69 @@
+# 82. Remove Duplicates from Sorted List II
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def deleteDuplicates(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        p = head.next
+        while p and head.val == p.val:
+            if p.next and head.val != p.next.val:
+                head = p.next
+                p = head.next
+            else:
+                p = p.next
+        q = head
+        while p and q.next:
+            if p.next and p.val != p.next.val:
+                if q.next == p:
+                    q = q.next
+                    p = p.next
+                else:
+                    q.next = p.next
+                    q = p.next
+                    p = p.next.next
+            elif not p.next:
+                if q.next == p:
+                    if q.val == p.val:
+                        q.next
+                else:
+                    q.next = p.next
+            elif p.val == p.next.val:
+                p = p.next
+        return head
+# ----------------------------------------------------------------------
+
+# 83. Remove Duplicates from Sorted List 
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def deleteDuplicates(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        p = head
+
+        while p and p.next:
+            if p.val == p.next.val:
+                p.next = p.next.next
+            else:
+                p = p.next
+        return head
+# ----------------------------------------------------------------------
+
 # 142. Linked List Cycle II
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -189,6 +255,59 @@ class Solution(object):
             new.next = p.next
             p.next = new
         return tmp.next
+# ----------------------------------------------------------------------
+
+# 148. Sort List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def sortList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        slow = fast = head
+        while fast and fast.next:
+            fast =fast.next
+            if slow.next != fast:
+                slow = slow.next
+            if fast:
+                fast = fast.next
+        p = slow.next
+        slow.next = None
+        head = self.sortList(head)
+        p = self.sortList(p)
+        head = self.merge(head, p)
+
+        return head
+
+    def merge(self, head1, head2):
+        head = ListNode(0)
+        cur = head
+        while head1 and head2:
+            if head1.val < head2.val:
+                cur.next = head1
+                cur = cur.next
+                head1 = head1.next
+            else:
+                cur.next = head2
+                cur = cur.next
+                head2 = head2.next
+        while head1:
+            cur.next = head1
+            cur = cur.next
+            head1 = head1.next
+        while head2:
+            cur.next = head2
+            cur = cur.next
+            head2 = head2.next
+        return head.next
 # ----------------------------------------------------------------------
 
 # 160. Intersection of Two Linked Lists
