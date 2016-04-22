@@ -155,15 +155,13 @@ class Solution(object):
         if not head or not head.next:
             return head
         curPtr = head
-        pHead = pTail = head
 
         myHead = ListNode(0)
-
+        p = myHead
         while curPtr:
             nextPtr = curPtr.next
-            p = myHead
-
-            if curPtr.val > pTail.val:
+            if myHead.next and myHead.next.val > curPtr.val or p.next and curPtr.val < p.next.val:
+                p = myHead
             while p.next and p.next.val < curPtr.val:
                 p = p.next
 
@@ -173,6 +171,24 @@ class Solution(object):
             curPtr = nextPtr
 
         return myHead.next
+
+    def insertionSortList2(self, head):
+        p = tmp = ListNode(0)
+        cur = tmp.next = head
+        while cur and cur.next:
+            val = cur.next.val
+            if cur.val < val:
+                cur = cur.next
+                continue
+            if p.next.val > val:
+                p = tmp
+            while p.next.val < val:
+                p = p.next
+            new = cur.next
+            cur.next = new.next
+            new.next = p.next
+            p.next = new
+        return tmp.next
 # ----------------------------------------------------------------------
 
 # 160. Intersection of Two Linked Lists
