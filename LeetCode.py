@@ -13,33 +13,70 @@ class Solution(object):
         """
         if not head or not head.next:
             return head
-        p = head.next
-        while p and head.val == p.val:
-            if p.next and head.val != p.next.val:
-                head = p.next
-                p = head.next
+        res = ListNode(0)
+        tail = res
+
+        isRepeated = False
+        while head: 
+            while  head.next and head.val == head.next.val:
+                isRepeated = True
+                head = head.next
+            if isRepeated:
+                isRepeated = False
+            else:
+                tail.next = head
+                tail = tail.next
+            head = head.next
+        tail.next = None
+        return res.next
+
+    def deleteDuplicates2(self,head):
+        if not head or not head.next:
+            return head
+        p = ans = ListNode(0)
+        flag = False
+        while head:
+            while head.next and head.val == head.next.val:
+                head = head.next
+                flag = True
+            if flag:
+                p.next = head.next
+                flag = False
             else:
                 p = p.next
-        q = head
-        while p and q.next:
-            if p.next and p.val != p.next.val:
-                if q.next == p:
-                    q = q.next
-                    p = p.next
-                else:
-                    q.next = p.next
-                    q = p.next
-                    p = p.next.next
-            elif not p.next:
-                if q.next == p:
-                    if q.val == p.val:
-                        q.next
-                else:
-                    q.next = p.next
-            elif p.val == p.next.val:
+                head = head.next
+        return ans.next
+        
+    def deleteDuplicates3(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return head
+        dummy = ListNode(0)
+        dummy.next = head
+        prev = dummy
+        p = head
+
+        while p and p.next:
+            if p.val != p.next.val:
+                prev = p 
                 p = p.next
-        return head
+            else:
+                val = p.val
+                n = p.next.next
+                while n:
+                    if n.val != val:
+                        break
+                    n = n.next
+                prev.next = n
+                p = n
+
+        return dummy.next
 # ----------------------------------------------------------------------
+
+
 
 # 83. Remove Duplicates from Sorted List 
 # Definition for singly-linked list.
