@@ -146,6 +146,58 @@ class Solution(object):
         return head
 # ----------------------------------------------------------------------
 
+# 92. Reverse Linked List II
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def reverseBetween(self, head, m, n):
+        """
+        :type head: ListNode
+        :type m: int
+        :type n: int
+        :rtype: ListNode
+        """
+        dummy = ListNode(0)
+        dummy.next = head
+        r = dummy
+        p = head
+        while m > 1:
+            r, p = r.next, p.next
+            m, n = m - 1, n - 1
+        q = p.next
+        while n > 1:
+            tmp = q.next
+            q.next = p
+            p = q
+            q = tmp
+            n -= 1
+        r.next.next = q
+        r.next = p
+
+        return dummy.next
+
+    def reverseBetween2(self, head, m, n):
+        dummy = ListNode(0)
+        p = dummy
+        while m > 1:
+            p.next = head
+            p, head = p.next, head.next
+            m, n = m - 1, n - 1
+        tmp = head
+        while n > 1:
+            q = head.next
+            head.next = p.next
+            p.next =head
+            head = q
+            n -= 1
+        tmp.next = head
+        return dummy.next
+# ----------------------------------------------------------------------
+
 # 142. Linked List Cycle II
 # Definition for singly-linked list.
 # class ListNode(object):
