@@ -43,6 +43,76 @@ class Solution(object):
         return dummy.next
 # ----------------------------------------------------------------------       
 
+# 24. Swap Nodes in Pairs
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def swapPairs(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head:
+            return head
+        p = dummy = ListNode(0)
+        p.next = head
+        left = head
+        right = left.next
+        while left and right:
+            left.next = right.next
+            right.next = left
+            p.next = right
+
+            p = left
+            left = left.next
+            if left:
+                right = left.next
+        return dummy.next
+
+# ----------------------------------------------------------------------
+
+# 61. Rotate List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def rotateRight(self, head, k):
+        """
+        :type head: ListNode
+        :type k: int
+        :rtype: ListNode
+        """
+        if not head:
+            return head
+
+        total = 1
+        p = head
+        while p.next:
+            total += 1
+            p = p.next
+
+        k %= total
+        if k == 0:
+            return head
+
+        cnt = total - k
+        p.next = head
+        while cnt > 0:
+            p = p.next
+            cnt -= 1
+        head = p.next
+        p.next = None
+
+        return head
+# ----------------------------------------------------------------------
+
 # 82. Remove Duplicates from Sorted List II
 # Definition for singly-linked list.
 # class ListNode(object):
