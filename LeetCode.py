@@ -191,8 +191,6 @@ class Solution(object):
         return dummy.next
 # ----------------------------------------------------------------------
 
-
-
 # 83. Remove Duplicates from Sorted List 
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -214,6 +212,67 @@ class Solution(object):
             else:
                 p = p.next
         return head
+# ----------------------------------------------------------------------
+
+# 86. Partition List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def partition(self, head, x):
+        """
+        :type head: ListNode
+        :type x: int
+        :rtype: ListNode
+        """
+        dummy = ListNode(0)
+        dummy.next = head
+        p = q = dummy
+        
+        while p.next and p.next.val < x:
+            p = p.next
+            q = q.next
+            
+        while q and q.next:
+            while q and q.next and q.next.val >= x:
+                q = q.next
+
+            tmp = q.next
+            if not tmp:
+                break
+            q.next = q.next.next
+
+            tmp.next = p.next
+            p.next = tmp
+            p = tmp
+        return dummy.next
+
+    def partition2(self, head, x):
+        """
+        :type head: ListNode
+        :type x: int
+        :rtype: ListNode
+        """
+        less = ListNode(0)
+        greater = ListNode(0)
+        p, q, r = less, greater, head
+
+        while r:
+            if r.val < x:
+                p.next = r
+                p = r
+            else:
+                q.next = r
+                q = r
+            r = r.next
+        
+        q.next = None
+        p.next = greater.next
+
+        return less.next
 # ----------------------------------------------------------------------
 
 # 92. Reverse Linked List II
