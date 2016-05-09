@@ -1,3 +1,68 @@
+# 2. Add Two Numbers
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        p, q= l1, l2
+        carry = 0
+        r = p
+        while p and q:
+            _sum = p.val + q.val + carry
+            p.val = _sum % 10
+            carry = _sum / 10
+            if not p.next:
+                r = p
+            p, q = p.next, q.next
+
+        if q:
+            r.next = q
+            p = q
+        while p:
+            _sum = p.val + carry
+            p.val = _sum % 10
+            carry = _sum / 10
+            if not p.next:
+                r = p
+            p = p.next
+            if _sum < 10:
+                break
+        if carry > 0:
+            r.next = ListNode(carry)
+
+        return l1
+
+    def addTwoNumbers2(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        p = dummy = ListNode(0)
+        carry = 0
+        while l1 or l2:
+            val = carry + (l1.val if l1 else 0) + (l2.val if l2 else 0)
+            carry = val / 10
+            val %= 10
+            p.next = ListNode(val)
+            p = p.next
+            l1 = l1 and l1.next
+            l2 = l2 and l2.next
+        if carry > 0:
+            p.next = ListNode(carry)
+            p = p.next
+
+        return dummy.next
+# ---------------------------------------------------------------------- 
+
 # 23. Merge k Sorted Lists
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -324,6 +389,80 @@ class Solution(object):
             head = q
             n -= 1
         tmp.next = head
+        return dummy.next
+# ----------------------------------------------------------------------
+
+# 138. Copy List with Random Pointer
+# Definition for singly-linked list with a random pointer.
+# class RandomListNode(object):
+#     def __init__(self, x):
+#         self.label = x
+#         self.next = None
+#         self.random = None
+
+class Solution(object):
+    def copyRandomList(self, head):
+        """
+        :type head: RandomListNode
+        :rtype: RandomListNode
+        """
+        p = dummy = RandomListNode(0)
+        q = head
+        m = {}
+        while q:
+            tmp = RandomListNode(q.label)
+            p.next = tmp
+            p = tmp
+            tmp.random = q.random
+
+            m[q] = tmp
+
+            q = q.next
+        q = dummy.next
+        while q:
+            if q.random:
+                q.random = m[q.random]
+            q = q.next
+            
+        return dummy.next
+
+    def copyRandomList2(self, head):
+        """
+        :type head: RandomListNode
+        :rtype: RandomListNode
+        """
+        if not head:
+            return None
+
+        # 遍历并插入新节点
+        h = head
+        while h:
+            node = RandomListNode(h.label)
+            node.random = h.random
+
+            tmp = h.next
+            h.next = node
+            node.next = tmp
+            h = tmp
+
+        # 调整random
+        h = head.next
+        while h:
+            if h.random:
+                h.random = h.random.next
+            if not h.next:
+                break
+            h = h.next.next
+
+        # 断开链表
+        h = head
+        dummy = p = RandomListNode(0)
+        while h:
+            p.next = h.next
+            p = p.next
+            h.next = h.next.next
+            h = h.next
+
         return dummy.next
 # ----------------------------------------------------------------------
 
