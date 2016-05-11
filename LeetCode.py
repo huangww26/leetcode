@@ -466,6 +466,28 @@ class Solution(object):
         return dummy.next
 # ----------------------------------------------------------------------
 
+# 141. Linked List Cyc# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def hasCycle(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        slow = fast = head
+
+        while fast and fast.next:
+            slow, fast = slow.next, fast.next.next
+            if slow == fast:
+                return True
+
+        return slow == fast
+# ----------------------------------------------------------------------
+
 # 142. Linked List Cycle II
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -817,6 +839,30 @@ class Solution(object):
         return res
 # ----------------------------------------------------------------------
 
+# 203. Remove Linked List Elements# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def removeElements(self, head, val):
+        """
+        :type head: ListNode
+        :type val: int
+        :rtype: ListNode
+        """
+        p = dummy = ListNode(0)
+        p.next = head
+        while p and p.next:
+            if p.next.val == val:
+                p.next = p.next.next     
+            else:
+                p = p.next
+
+        return dummy.next
+# ----------------------------------------------------------------------
+
 # 206. Reverse Linked List
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -840,4 +886,34 @@ class Solution(object):
             p = p.next
         p.next = None    
         return head
+# ----------------------------------------------------------------------
+
+# 234. Palindrome Linked List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def isPalindrome(self, head):
+        """
+        :type head: ListNode
+        :rtype: bool
+        """
+        slow = fast = head
+        pre = None
+
+        while fast and fast.next:
+            tmp = slow
+            slow = slow.next
+            fast = fast.next.next
+            tmp.next = pre
+            pre = tmp
+        if fast:
+            slow = slow.next
+        while slow and pre.val == slow.val:
+            slow, pre = slow.next, pre.next
+
+        return slow == None
 # ----------------------------------------------------------------------
