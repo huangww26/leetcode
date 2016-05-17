@@ -392,6 +392,69 @@ class Solution(object):
         return dummy.next
 # ----------------------------------------------------------------------
 
+# 109. Convert Sorted List to Binary Search Tree
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def sortedListToBST(self, head):
+        """
+        :type head: ListNode
+        :rtype: TreeNode
+        """
+        if not head:
+            return None
+        if not head.next:
+            return TreeNode(head.val)
+        slow, fast = head, head.next.next
+        while fast and fast.next:
+            fast = fast.next.next
+            slow = slow.next
+        root = TreeNode(slow.next.val)
+        root.right = self.sortedListToBST(slow.next.next)
+        slow.next = None
+        root.left = self.sortedListToBST(head)
+        return root
+# ----------------------------------------------------------------------
+
+# 114. Flatten Binary Tree to Linked List 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def flatten(self, root):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
+        if root:
+            self.flatten(root.left)
+            self.flatten(root.right)
+            
+            p = dummy = TreeNode(0)
+            dummy.right = root.left
+            while p.right:
+                p = p.right
+            p.right = root.right
+
+            root.left = None
+            root.right = dummy.right
+# ----------------------------------------------------------------------
+
 # 138. Copy List with Random Pointer
 # Definition for singly-linked list with a random pointer.
 # class RandomListNode(object):
@@ -916,4 +979,116 @@ class Solution(object):
             slow, pre = slow.next, pre.next
 
         return slow == None
+# ----------------------------------------------------------------------
+
+# 237. Delete Node in a Linked List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def deleteNode(self, node):
+        """
+        :type node: ListNode
+        :rtype: void Do not return anything, modify node in-place instead.
+        """
+        if node.next:
+            node.val = node.next.val
+            node.next = node.next.next
+        else:
+            node = None
+# ----------------------------------------------------------------------
+
+# 328. Odd Even Linked List
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def oddEvenList(self, head):
+        """
+        :type head: ListNode
+        :rtype: ListNode
+        """
+        if not head or not head.next:
+            return head
+        odd, even = head, head.next
+        p = even
+
+        while even and even.next:
+            odd.next = even.next
+            odd = odd.next
+            even.next = odd.next
+            even = even.next
+        odd.next = p
+
+        return head
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# 341. Flatten Nested List Iterator
+# """
+# This is the interface that allows for creating nested lists.
+# You should not implement it, or speculate about its implementation
+# """
+#class NestedInteger(object):
+#    def isInteger(self):
+#        """
+#        @return True if this NestedInteger holds a single integer, rather than a nested list.
+#        :rtype bool
+#        """
+#
+#    def getInteger(self):
+#        """
+#        @return the single integer that this NestedInteger holds, if it holds a single integer
+#        Return None if this NestedInteger holds a nested list
+#        :rtype int
+#        """
+#
+#    def getList(self):
+#        """
+#        @return the nested list that this NestedInteger holds, if it holds a nested list
+#        Return None if this NestedInteger holds a single integer
+#        :rtype List[NestedInteger]
+#        """
+
+class NestedIterator(object):
+
+    def __init__(self, nestedList):
+        """
+        Initialize your data structure here.
+        :type nestedList: List[NestedInteger]
+        """
+        self.S = []
+        self.nextItem = 0
+        for i in range(len(nestedList)-1, -1, -1):
+            self.S.append(nestedList[i])
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        return self.nextItem
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        while self.S:
+            curItem = self.S.pop()
+            if curItem.isInteger():
+                self.nextItem = curItem
+                return True
+            nextList = curItem.getList()
+            for i in range(len(nextList)-1, -1, -1):
+                self.S.append(nextList[i])
+        return False
+
+# Your NestedIterator object will be instantiated and called as such:
+# i, v = NestedIterator(nestedList), []
+# while i.hasNext(): v.append(i.next())
 # ----------------------------------------------------------------------
