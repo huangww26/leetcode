@@ -392,6 +392,159 @@ class Solution(object):
         return dummy.next
 # ----------------------------------------------------------------------
 
+# 94. Binary Tree Inorder Traversal
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def inorderTraversal(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        s = []
+        res = []
+        p = root
+        while p or s:
+            while p:
+                s.append(p)
+                p = p.left
+            if s:
+                p = s.pop()
+                res.append(p.val)
+                p = p.right
+        return res
+# ---------------------------------------------------------------------- 
+
+# 102. Binary Tree Level Order Traversal
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def levelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        res = []
+        s = [root]
+        while s:
+            count = len(s)
+            tmp = []
+            while count > 0:
+                p = s.pop(0)
+                tmp.append(p.val)
+                if p.left:
+                    s.append(p.left)
+                if p.right:
+                    s.append(p.right)
+                count -= 1
+            res.append(tmp)
+        return res
+    
+    def levelOrder2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        res = []
+        if not root:
+            return res
+        self.addNode(root, res, 0)
+        return res
+    def addNode(self, node, res, count):
+        if not node:
+            return
+        if len(res) <= count:
+            tmp = [node.val]
+            res.append(tmp)
+        else:
+            res[count].append(node.val)
+        self.addNode(node.left, res, count+1)
+        self.addNode(node.right, res, count+1)
+# ---------------------------------------------------------------------- 
+
+# 103. Binary Tree Zigzag Level Order Traversal
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def zigzagLevelOrder(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        res = []
+        s = [root]
+        toLeft = True
+        while s:
+            count = len(s)
+            tmp = []
+            while count > 0:
+                p = s.pop(0)
+                if toLeft:
+                    tmp.append(p.val)
+                else:
+                    tmp.insert(0, p.val)
+                if p.left:
+                    s.append(p.left)
+                if p.right:
+                    s.append(p.right)
+                count -= 1
+            res.append(tmp)
+            toLeft = False if toLeft else True
+        return res
+# ----------------------------------------------------------------------
+
+# 107. Binary Tree Level Order Traversal II
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        res = []
+        s = [root]
+        while s:
+            count = len(s)
+            tmp = []
+            while count > 0:
+                p = s.pop(0)
+                tmp.append(p.val)
+                if p.left:
+                    s.append(p.left)
+                if p.right:
+                    s.append(p.right)
+                count -= 1
+            res.insert(0, tmp)
+        return res
+# ----------------------------------------------------------------------
+
 # 109. Convert Sorted List to Binary Search Tree
 # Definition for singly-linked list.
 # class ListNode(object):
