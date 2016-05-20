@@ -420,6 +420,128 @@ class Solution(object):
         return res
 # ---------------------------------------------------------------------- 
 
+# 95. Unique Binary Search Trees II
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def generateTrees(self, n):
+        """
+        :type n: int
+        :rtype: List[TreeNode]
+        """
+        if n == 0:
+            return []
+        values = [i+1 for i in range(n)]     
+        return self.helper(range())
+
+    def helper(self, A):
+        if len(A) == 0:
+            return [None]
+        res = []
+        for index, val in enumerate(A):
+            leftSubTree = self.helper(A[:index])
+            rightSubTree = self.helper(A[index+1:])
+            for leftChild in leftSubTree:
+                for rightChild in rightSubTree:
+                    node = TreeNode(val)
+                    node.left = leftChild
+                    node.right = rightChild
+                    res.append(node)
+        return res
+# ----------------------------------------------------------------------
+
+# 96. Unique Binary Search Trees
+class Solution(object):
+    def numTrees(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        num = [0] * (n+1)
+        num[0] = 1
+        for i in range(1, n+1):
+            for j in range(i):
+                num[i] += num[j] * num[i-1-j]
+        return num[n]
+# ----------------------------------------------------------------------
+
+# 98. Validate Binary Search Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    pre = None
+    def isValidBST(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        if not isValidBST(root.left):
+            return False
+        if self.pre and self.pre.val >= root.val:
+            return False
+        self.pre = root
+        return slef.isValidBST(root.right)
+    def isValidBST2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        pre = None
+        s = []
+        while True:
+            while root:
+                s.append(root)
+                root = root.left
+            if not s:
+                return True
+            node = s.pop()
+            if pre and pre.val >= node.val:
+                return False
+            pre = node
+            root = node.right
+# ----------------------------------------------------------------------
+
+# 99. Recover Binary Search Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def recoverTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: void Do not return anything, modify root in-place instead.
+        """
+        pre = None
+        s = []
+        while True:
+            while root:
+                s.append(root)
+                root = root.left
+            if not s:
+                break
+            node = s.pop()
+            if pre and pre.val > node.val:
+                pre.val, node.val = node.val, pre.val
+            pre = node
+            root = node.right
+# ----------------------------------------------------------------------
+
 # 102. Binary Tree Level Order Traversal
 # Definition for a binary tree node.
 # class TreeNode(object):
