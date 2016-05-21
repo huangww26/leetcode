@@ -601,6 +601,78 @@ class Solution(object):
         if p.val != q.val:
             return False
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right) 
+
+    def isSameTree2(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+        s1, s2 = [p], [q]
+        while s1:
+            r, s = s1.pop(), s2.pop()
+            if (not r or not s) and r != s:
+                return False
+            elif r and s:
+                if r.val != s.val:
+                    return False
+                elif r.left or r.right:
+                    s1.append(r.right)
+                    s1.append(r.left)
+                    s2.append(s.right)
+                    s2.append(s.left)
+        return True
+# ----------------------------------------------------------------------
+
+# 101. Symmetric Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isSymmetric(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        left_queue, right_queue = [root.left], [root.right]
+        while left_queue or right_queue:
+            p, q = left_queue.pop(0), right_queue.pop(0)
+            if not p or not q:
+                if p != q:
+                    return False
+            else:
+                if p.val != q.val:
+                    return False
+                if p.left or p.right:
+                    left_queue.append(p.left)
+                    left_queue.append(p.right)
+                    right_queue.append(q.right)
+                    right_queue.append(q.left)
+        return True
+    def isSymmetric2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        return self.isReverse(root.left, root.right)
+    def isReverse(self, p, q):
+        if not p or not q:
+            if p != q:
+                return False
+            else:
+                return True
+        if p.val != q.val:
+            return False
+        return self.isReverse(p.left, q.right) and self.isReverse(p.right, q.left)
+
 # ----------------------------------------------------------------------
 
 # 102. Binary Tree Level Order Traversal
