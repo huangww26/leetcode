@@ -418,6 +418,29 @@ class Solution(object):
                 res.append(p.val)
                 p = p.right
         return res
+    def inorderTraversal2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        cur = root
+        while cur:
+            if not cur.left:
+                res.append(cur.val)
+                cur = cur.right
+            else:
+                pre = cur.left
+                while pre.right and pre.right != cur:
+                    pre = pre.right
+                if not pre.right:
+                    pre.right = cur
+                    cur = cur.left
+                else:
+                    pre.right = None
+                    res.append(cur.val)
+                    cur = cur.right
+        return res
 # ---------------------------------------------------------------------- 
 
 # 95. Unique Binary Search Trees II
@@ -527,19 +550,57 @@ class Solution(object):
         :type root: TreeNode
         :rtype: void Do not return anything, modify root in-place instead.
         """
-        pre = None
-        s = []
-        while True:
-            while root:
-                s.append(root)
-                root = root.left
-            if not s:
-                break
-            node = s.pop()
-            if pre and pre.val > node.val:
-                pre.val, node.val = node.val, pre.val
-            pre = node
-            root = node.right
+        cur, pre, first, second, parent = root, None, None, None, None
+        while cur:
+            if not cur.left:
+                if parent and parent.val > cur.val:
+                    if not first:
+                        first = parent
+                    second = cur
+                parent = cur
+                cur = cur.right
+            else:
+                pre = cur.left
+                while pre.right and pre.right != cur:
+                    pre = pre.right
+                if not pre.right:
+                    pre.right = cur
+                    cur = cur.left
+                else:
+                    if parent and parent.val > cur.val:
+                        if not first:
+                            first = parent
+                        second = cur
+                    parent = cur
+                    pre.right = None
+                    cur = cur.right
+        if first and second:
+            first.val, second.val = second.val, first.val
+# ----------------------------------------------------------------------
+
+# 100. Same Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isSameTree(self, p, q):
+        """
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: bool
+        """
+        if not p or not q:
+            if p == q:
+                return True
+            else:
+                return False
+        if p.val != q.val:
+            return False
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right) 
 # ----------------------------------------------------------------------
 
 # 102. Binary Tree Level Order Traversal
