@@ -593,14 +593,13 @@ class Solution(object):
         :type q: TreeNode
         :rtype: bool
         """
-        if not p or not q:
-            if p == q:
-                return True
-            else:
-                return False
-        if p.val != q.val:
-            return False
-        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right) 
+        if p == None and q == None:
+            return True
+        if p and q and p.val == q.val and \
+                self.isSameTree(p.left, q.left) and \
+                self.isSameTree(p.right, q.right):
+                    return True
+        return False
 
     def isSameTree2(self, p, q):
         """
@@ -820,14 +819,14 @@ class Solution(object):
         :type inorder: List[int]
         :rtype: TreeNode
         """
-        return self.helper(preorder, inorder, 0, 0, len(inorder)-1)
-    def helper(self, preorder, inorder, index, start, end):
-        if index >= len(preorder) or start > end:
+        return self.createBinaryTree(preorder, inorder, len(preorder))
+    def createBinaryTree(self, preorder, inorder, n):
+        if n == 0:
             return None
-        root = TreeNode(preorder[index])
-        i = inorder.index(preorder[index])
-        root.left = self.helper(preorder, inorder, index+1, start, i-1)
-        root.right = self.helper(preorder, inorder, index+i-start+1, i+1, end)
+        i = inorder.index(preorder[0])
+        root = TreeNode(preorder[0])
+        root.left = self.createBinaryTree(preorder[1:], inorder, i)
+        root.right = self.createBinaryTree(preorder[i+1:], inorder[i+1:], n-i-1)
 
         return root
     
@@ -852,6 +851,25 @@ class Solution(object):
                 pre.right = tmp
             s.append(tmp)
         return root
+# ----------------------------------------------------------------------
+
+# 106. Construct Binary Tree from Inorder and Postorder Traversal
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def buildTree(self, inorder, postorder):
+        """
+        :type inorder: List[int]
+        :type postorder: List[int]
+        :rtype: TreeNode
+        """
+    def createBinaryTree(self, inorder, postorder, index):
+
 # ----------------------------------------------------------------------
 
 # 107. Binary Tree Level Order Traversal II
