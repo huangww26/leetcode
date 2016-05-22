@@ -767,6 +767,93 @@ class Solution(object):
         return res
 # ----------------------------------------------------------------------
 
+# 104. Maximum Depth of Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def maxDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        max_depth = 0
+        if not root:
+            return max_depth
+        s = [root]
+        while s:
+            count = len(s)
+            for _ in range(count):
+                tmp = s.pop(0)
+                if tmp.left:
+                    s.append(tmp.left)
+                if tmp.right:
+                    s.append(tmp.right)
+            max_depth += 1
+        return max_depth
+    def maxDepth2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        return max(self.maxDepth2(root.left)+1, self.maxDepth2(root.right)+1)
+# ----------------------------------------------------------------------
+
+# 105. Construct Binary Tree from Preorder and Inorder Traversal
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def buildTree(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        return self.helper(preorder, inorder, 0, 0, len(inorder)-1)
+    def helper(self, preorder, inorder, index, start, end):
+        if index >= len(preorder) or start > end:
+            return None
+        root = TreeNode(preorder[index])
+        i = inorder.index(preorder[index])
+        root.left = self.helper(preorder, inorder, index+1, start, i-1)
+        root.right = self.helper(preorder, inorder, index+i-start+1, i+1, end)
+
+        return root
+    
+    def buildTree2(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if not preorder:
+            return None
+        root = TreeNode(preorder[0])
+        s = [root]
+        for i in preorder[1:]:
+            tmp = TreeNode(i)
+            if inorder.index(i) < inorder.index(s[-1].val):
+                s[-1].left = tmp
+            else:
+                pre = s.pop()
+                while s and inorder.index(i) > inorder.index(s[-1].val):
+                    pre = s.pop()
+                pre.right = tmp
+            s.append(tmp)
+        return root
+# ----------------------------------------------------------------------
+
 # 107. Binary Tree Level Order Traversal II
 # Definition for a binary tree node.
 # class TreeNode(object):
