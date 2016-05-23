@@ -868,8 +868,15 @@ class Solution(object):
         :type postorder: List[int]
         :rtype: TreeNode
         """
-    def createBinaryTree(self, inorder, postorder, index):
-
+        return self.createBinaryTree(inorder, postorder, len(inorder)-1, 0, len(postorder)-1)
+    def createBinaryTree(self, inorder, postorder, index, start, end):
+        if index < 0 or start > end:
+            return None
+        i = inorder.index(postorder[index])
+        root = TreeNode(postorder[index])
+        root.left = self.createBinaryTree(inorder, postorder, index-(end-i+1), start, i-1)
+        root.right = self.createBinaryTree(inorder, postorder, index-1, i+1, end)
+        return root
 # ----------------------------------------------------------------------
 
 # 107. Binary Tree Level Order Traversal II
@@ -903,6 +910,33 @@ class Solution(object):
                 count -= 1
             res.insert(0, tmp)
         return res
+# ----------------------------------------------------------------------
+
+# 108. Convert Sorted Array to Binary Search Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def sortedArrayToBST(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: TreeNode
+        """
+        return self.createBST(nums, 0, len(nums))
+    def createBST(self, A, start, end):
+        if start >= end:
+            return None
+        mid = (start + end) / 2
+        if (start + end) % 2 != 0:
+            mid += 1
+        root = TreeNode(A[mid])
+        root.left = self.createBST(A, start, mid-1)
+        root.right = self.createBST(A, mid+1, end)
+        return root
 # ----------------------------------------------------------------------
 
 # 109. Convert Sorted List to Binary Search Tree
