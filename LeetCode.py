@@ -974,6 +974,76 @@ class Solution(object):
         return root
 # ----------------------------------------------------------------------
 
+# 110. Balanced Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def isBalanced(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        if not root:
+            return True
+        left_height = self.height(root.left)
+        right_height = self.height(root.right)
+        if abs(left_height - right_height) > 1:
+            return False
+        return self.isBalanced(root.left) and self.isBalanced(root.right)
+    def height(self, root):
+        if not root:
+            return 0
+        lh = self.height(root.left)
+        rh = self.height(root.right)
+        return max(lh, rh)+1
+
+    def isBalanced2(self, root):
+        """
+        :type root: TreeNode
+        :rtype: bool
+        """
+        return self.dfs(root) != -1
+    def dfs(self, root):
+        if not root:
+            return 0
+        lh = self.dfs(root.left)
+        if lh == -1:
+            return -1
+        rh = self.dfs(root.right)
+        if rh == -1:
+            return -1
+        return -1 if abs(lh - rh) > 1 else max(lh, rh)+1
+# ----------------------------------------------------------------------
+
+# 111. Minimum Depth of Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def minDepth(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        if not root:
+            return 0
+        if not root.left:
+            return self.minDepth(root.right)
+        elif not root.right:
+            return self.minDepth(root.left)
+        else:
+            return min(self.minDepth(root.left), self.minDepth(root.right))+1
+# ----------------------------------------------------------------------
+
 # 114. Flatten Binary Tree to Linked List 
 # Definition for a binary tree node.
 # class TreeNode(object):
