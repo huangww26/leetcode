@@ -1072,6 +1072,34 @@ class Solution(object):
             root.right = dummy.right
 # ----------------------------------------------------------------------
 
+# 124. Binary Tree Maximum Path Sum 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        res = [-2**31]
+        self.helper(root, res)
+        return res[0]
+    def helper(self, node, res):
+        if not node:
+            return 0
+        left_ps = self.helper(node.left, res)
+        right_ps = self.helper(node.right, res)
+
+        maxValue = max(left_ps+right_ps+node.val, left_ps+node.val, right_ps+node.val, node.val)
+        res[0] = max(maxValue, res[0])
+        return max(left_ps+node.val, right_ps+node.val, node.val)
+# ----------------------------------------------------------------------
+
 # 138. Copy List with Random Pointer
 # Definition for singly-linked list with a random pointer.
 # class RandomListNode(object):
@@ -1519,6 +1547,78 @@ class Solution(object):
         return res
 # ----------------------------------------------------------------------
 
+# 173. Binary Search Tree Iterator
+# Definition for a  binary tree node
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class BSTIterator(object):
+    def __init__(self, root):
+        """
+        :type root: TreeNode
+        """
+        self.s = []
+        p = root
+        while p:
+            s.append(p)
+            p = p.left
+
+    def hasNext(self):
+        """
+        :rtype: bool
+        """
+        if self.s:
+            return True
+        return False
+
+    def next(self):
+        """
+        :rtype: int
+        """
+        p = s.pop()
+        q = p.right
+        while q:
+            s.append(q)
+            q = q.left
+        return p.val
+# ----------------------------------------------------------------------
+
+# 199. Binary Tree Right Side View
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def rightSideView(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[int]
+        """
+        res = []
+        if not root:
+            return res
+        q = [[], []]
+        idx = 0
+        q[idx].append(root)
+        while q[idx]:
+            q[1-idx] = []
+            res.append(q[idx][0].val)
+            while q[idx]:
+                tmp = q[idx].pop(0)
+                if tmp.right:
+                    q[1-idx].append(tmp.right)
+                if tmp.left:
+                    q[1-idx].append(tmp.left)
+            idx = 1 - idx
+        return res
+# ----------------------------------------------------------------------
+
 # 203. Remove Linked List Elements# Definition for singly-linked list.
 # class ListNode(object):
 #     def __init__(self, x):
@@ -1566,6 +1666,42 @@ class Solution(object):
             p = p.next
         p.next = None    
         return head
+# ----------------------------------------------------------------------
+
+# 208. Implement Trie (Prefix Tree)
+# ----------------------------------------------------------------------
+
+# 222. Count Complete Tree Nodes
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def countNodes(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        cnt = 0
+        if not root:
+            return cnt
+        q = [[], []]
+        idx = 0
+        q[idx].append(root)
+        while q[idx]:
+            q[1-idx] = []
+            cnt += len(q[idx])
+            while q[idx]:
+                tmp = q[idx].pop(0)
+                if tmp.left:
+                    q[1-idx].append(tmp.left)
+                if tmp.right:
+                    q[1-idx].append(tmp.right)
+            idx = 1 - idx
+        return cnt
 # ----------------------------------------------------------------------
 
 # 234. Palindrome Linked List
