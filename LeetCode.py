@@ -1685,23 +1685,36 @@ class Solution(object):
         :type root: TreeNode
         :rtype: int
         """
-        cnt = 0
         if not root:
-            return cnt
-        q = [[], []]
-        idx = 0
-        q[idx].append(root)
-        while q[idx]:
-            q[1-idx] = []
-            cnt += len(q[idx])
-            while q[idx]:
-                tmp = q[idx].pop(0)
-                if tmp.left:
-                    q[1-idx].append(tmp.left)
+            return 0
+        q = [root]
+        cnt = 1
+        while q:
+            tmp = q.pop(0)
+            if tmp.val != -100:
+                tmp.val = -100
                 if tmp.right:
-                    q[1-idx].append(tmp.right)
-            idx = 1 - idx
+                    cnt += 1
+                    q.append(tmp.right)
+                if tmp.left:
+                    cnt += 1
+                    q.append(tmp.left)
         return cnt
+
+    def countNodes2(self, root):
+        if not root:
+            return 0
+        hl = hr = 0
+        l = r = root
+        while l:
+            hl += 1
+            l = l.left
+        while r:
+            hr += 1
+            r = r.right
+        if hl == hr:
+            return (1 << hl) - 1
+        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
 # ----------------------------------------------------------------------
 
 # 234. Palindrome Linked List
