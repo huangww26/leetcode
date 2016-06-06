@@ -1723,13 +1723,23 @@ class Solution(object):
         :type root: TreeNode
         :rtype: TreeNode
         """
-        self.helper(root)
+        if not root:
+            return None
+        root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
         return root
-    def helper(self, root):
-        if root:
-            root.left, root.right = root.right, root.left
-            self.helper(root.left)
-            self.helper(root.right)
+    
+    def invertTree2(self, root):
+        if not root:
+            return root
+        q = [root]
+        while q:
+            tmp = q.pop(0)
+            if tmp.left:
+                q.append(tmp.left)
+            if tmp.right:
+                q.append(tmp.right)
+            tmp.left, tmp.right = tmp.right, tmp.left
+        return root
 # ----------------------------------------------------------------------
 
 # 234. Palindrome Linked List
@@ -1760,6 +1770,32 @@ class Solution(object):
             slow, pre = slow.next, pre.next
 
         return slow == None
+# ----------------------------------------------------------------------
+
+#235. Lowest Common Ancestor of a Binary Search Tree 
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        tmp = root
+        while tmp:
+            if p.val < tmp.val and q.val < tmp.val:
+                tmp = tmp.left
+            elif p.val > tmp.val and q.val > tmp.val:
+                tmp = tmp.right
+            else:
+                return tmp.val
 # ----------------------------------------------------------------------
 
 # 237. Delete Node in a Linked List
