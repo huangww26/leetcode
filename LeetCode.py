@@ -1687,34 +1687,49 @@ class Solution(object):
         """
         if not root:
             return 0
-        q = [root]
-        cnt = 1
-        while q:
-            tmp = q.pop(0)
-            if tmp.val != -100:
-                tmp.val = -100
-                if tmp.right:
-                    cnt += 1
-                    q.append(tmp.right)
-                if tmp.left:
-                    cnt += 1
-                    q.append(tmp.left)
-        return cnt
+        height = cnt = 0
+        p = root
+        while p:
+            p = p.left
+            height += 1
+        level = height - 2
+        p = root
+        while level >= 0:
+            tmp = p.left
+            for _ in range(level):
+                tmp = tmp.right
+            if tmp:
+                cnt += (1 << level)
+                p = p.right
+            else:
+                p = p.left
+            level -= 1
+        if p:
+            cnt += 1
+        return (1 << (height - 1)) - 1 + cnt
+# ----------------------------------------------------------------------
 
-    def countNodes2(self, root):
-        if not root:
-            return 0
-        hl = hr = 0
-        l = r = root
-        while l:
-            hl += 1
-            l = l.left
-        while r:
-            hr += 1
-            r = r.right
-        if hl == hr:
-            return (1 << hl) - 1
-        return 1 + self.countNodes(root.left) + self.countNodes(root.right)
+# 226. Invert Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def invertTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: TreeNode
+        """
+        self.helper(root)
+        return root
+    def helper(self, root):
+        if root:
+            root.left, root.right = root.right, root.left
+            self.helper(root.left)
+            self.helper(root.right)
 # ----------------------------------------------------------------------
 
 # 234. Palindrome Linked List
