@@ -1798,6 +1798,60 @@ class Solution(object):
                 return tmp.val
 # ----------------------------------------------------------------------
 
+# 236. Lowest Common Ancestor of a Binary Tree
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def lowestCommonAncestor(self, root, p, q):
+        """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
+        """
+        if not root:
+            return None
+        pathTop, pathToq = [], []
+        if not (self.pathToNode(pathTop, root, p) and self.pathToNode(pathToq, root, q)):
+            return None
+        n, m = pathTop[0], pathToq[0]
+        for i, j in zip(pathTop, pathToq):
+            if i.val != j.val:
+                return n
+            n, m = i, j
+        return n
+
+    def pathToNode(self, path, root, node):
+        if not root:
+            return False
+        path.append(root)
+        if root == node:
+            return True
+        if self.pathToNode(path, root.left, node):
+            return True
+        if self.pathToNode(path, root.right, node):
+            return True
+        path.pop()
+        return False
+
+    def lowestCommonAncestor2(self, root, p, q):
+        if not root:
+            return None
+        if root == p or root == q:
+            return root
+        left = self.lowestCommonAncestor2(root.left, p, q)
+        right = self.lowestCommonAncestor2(root.right, p, q)
+        if left and right:
+            return root
+        else:
+            return left if left else right
+# ----------------------------------------------------------------------
+
 # 237. Delete Node in a Linked List
 # Definition for singly-linked list.
 # class ListNode(object):
@@ -1816,6 +1870,37 @@ class Solution(object):
             node.next = node.next.next
         else:
             node = None
+# ----------------------------------------------------------------------
+
+# 257. Binary Tree Paths
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    # @param {TreeNode} root
+    # @return {string[]}
+    def binaryTreePaths(self, root):
+        res = []
+        path = [root]
+        self.backtrack(root, path, res)
+        return res
+
+    def backtrack(self, root, path, res):
+        if not root:
+            return 
+        path.append(str(root.val))
+        if not (root.left or root.right):
+            res.append('->'.join(path))
+        else:
+            self.backtrack(root.left, path, res)
+            self.backtrack(root.right, path, res)
+        path.pop()
+        
+
 # ----------------------------------------------------------------------
 
 # 328. Odd Even Linked List
