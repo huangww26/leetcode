@@ -1918,6 +1918,83 @@ class Solution:
             self.dfs(root.right, path, res)
 # ----------------------------------------------------------------------
 
+# 297. Serialize and Deserialize Binary Tree  
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Codec:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+        if not root:
+            return ""
+        if not root.left and not root.right:
+            return str(root.val)
+        elif not root.left:
+            return str(root.val)+"(,"+self.serialize(root.right)+")"
+        elif not root.right:
+            return str(root.val)+"("+self.serialize(root.left)+",)"
+        else:
+            return str(root.val)+"("+self.serialize(root.left)+","+self.serialize(root.right)+")"
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+        if not data:
+            return None
+        p = root = None
+        s = []
+        k = 0
+        num = ""
+        digits = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-"]
+        for chr in data:
+            if chr == "(":
+                k = 0
+                s.append(p)
+            elif chr == ",":
+                k = 1
+            elif chr == ")":
+                if s:
+                    s.pop()
+            else:
+                index = data.index(chr)
+                if index < len(data)-1 and data[index+1] in digits:
+                    num += chr
+                    continue
+                num += chr
+                if k == 0:
+                    tmp = TreeNode(self.toInt(num))
+                    if not p:
+                        p = root = tmp
+                    else:
+                        p.left = tmp
+                        p = tmp
+                elif k == 1:
+                    tmp = TreeNode(self.toInt(num))
+                    p = s.pop()
+                    p.right = tmp
+                    p = tmp
+                num = ""
+        return root
+    def toInt(self, s):
+        if not s:
+            return 0
+        if s.startswith('-'):
+            return -int(s[1:])
+        return int(s)
+# ----------------------------------------------------------------------
+
 # 328. Odd Even Linked List
 # Definition for singly-linked list.
 # class ListNode(object):
