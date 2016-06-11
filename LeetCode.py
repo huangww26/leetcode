@@ -1899,8 +1899,23 @@ class Solution:
             self.backtrack(root.left, path, res)
             self.backtrack(root.right, path, res)
         path.pop()
-        
 
+    def binaryTreePaths2(self, root):
+        res = []
+        if not root:
+            return res
+        self.dfs(root, "", res)
+        return res
+    def dfs(self, root, path, res):
+        if not (root.left or root.right):
+            path += (str(root.val))
+            res.append(path)
+            return
+        path += (str(root.val)+"->")
+        if root.left:
+            self.dfs(root.left, path, res)
+        if root.right:
+            self.dfs(root.right, path, res)
 # ----------------------------------------------------------------------
 
 # 328. Odd Even Linked List
